@@ -17,8 +17,8 @@ export default function Layout({ children }) {
           <Link to="/recipes" className="text-gray-600 hover:text-black">A–Z Recipes</Link>
           <Link to="/submit" className="text-gray-600 hover:text-black">Submit</Link>
           <Link to="/about" className="text-gray-600 hover:text-black">About</Link>
-          {user && <Link to="/cookbook">My Cookbook</Link>}
-          {user && <Link to="/moderate">Moderate</Link>}
+          {user && <Link to="/cookbook" className="text-gray-600 hover:text-black">My Cookbook</Link>}
+          {user && <Link to="/moderate" className="text-gray-600 hover:text-black">Moderate</Link>}
         </div>
 
         <div className="text-sm text-gray-600 space-x-2">

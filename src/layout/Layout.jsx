@@ -1,8 +1,22 @@
 import { Link } from 'react-router-dom';
 import { useSession } from '../lib/SessionContext';
+import { supabase } from '../lib/supabaseClient';
 
 export default function Layout({ children }) {
   const { user } = useSession();
+
+  const handleLogin = async () => {
+    const email = prompt("Enter your email to log in:");
+    if (email) {
+      const { error } = await supabase.auth.signInWithOtp({ email });
+      if (!error) alert("Check your email for a magic login link!");
+      else alert("Login failed: " + error.message);
+    }
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+  };
 
   return (
     <div>
@@ -14,8 +28,15 @@ export default function Layout({ children }) {
           {user && <Link to="/cookbook">My Cookbook</Link>}
           {user && <Link to="/moderate">Moderate</Link>}
         </div>
-        <div className="text-sm text-gray-600">
-          {user ? `Logged in as ${user.email}` : 'Not logged in'}
+        <div className="text-sm text-gray-600 space-x-2">
+          {user ? (
+            <>
+              <span>{user.email}</span>
+              <button onClick={handleLogout} className="underline text-red-600">Log out</button>
+            </>
+          ) : (
+            <button onClick={handleLogin} className="underline text-blue-600">Log in</button>
+          )}
         </div>
       </nav>
       <main className="p-4">{children}</main>

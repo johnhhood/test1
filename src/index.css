@@ -1,9 +1,70 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Reset & base styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 body {
-  font-family: system-ui, sans-serif;
-  background-color: #f9fafb;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+  background-color: #f0f0f0; /* sitebg */
   color: #111827;
+}
+
+/* Layout container */
+.layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Sidebar (Windows 95 style) */
+.sidebar {
+  width: 250px;
+  background-color: #c0c0c0; /* win95gray */
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  border-right: 2px solid black;
+}
+
+.sidebar nav a {
+  text-decoration: none;
+  color: black;
+  margin-bottom: 12px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.sidebar nav a:hover {
+  text-decoration: underline;
+}
+
+/* Main content area */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header bar (cyan-blue Win95 style) */
+.header {
+  background-color: #00bfff; /* win95blue */
+  color: black;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid black;
+}
+
+/* Page content tile */
+main {
+  padding: 1.5rem;
+  margin: 1rem;
+  background-color: white; /* tilebg */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 4px 4px 0 #999;
+  overflow-y: auto;
 }

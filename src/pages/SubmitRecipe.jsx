@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useSession } from '../lib/SessionContext';
@@ -18,6 +19,24 @@ export default function SubmitRecipe() {
   const handleChange = e => {
     const { name, value } = e.target;
     setForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageUpload = async (file) => {
+    const fileName = `${Date.now()}_${file.name}`;
+    const { data, error } = await supabase.storage
+      .from('recipe-images')
+      .upload(fileName, file);
+
+    if (error) {
+      console.error("Upload error:", error);
+      return null;
+    }
+
+    const { publicUrl } = supabase.storage
+      .from('recipe-images')
+      .getPublicUrl(fileName).data;
+
+    return publicUrl;
   };
 
   const handleSubmit = async e => {
@@ -52,7 +71,7 @@ export default function SubmitRecipe() {
     <div className="max-w-lg mx-auto p-6 bg-white border rounded shadow">
       <h2 className="text-xl font-bold mb-4">Submit a Recipe</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {['title', 'cook_time', 'servings', 'tags', 'image_url'].map((field) => (
+        {['title', 'cook_time', 'servings', 'tags'].map(field => (
           <div key={field}>
             <label className="block text-sm font-medium mb-1 capitalize">{field.replace('_', ' ')}</label>
             <input
@@ -61,10 +80,27 @@ export default function SubmitRecipe() {
               value={form[field]}
               onChange={handleChange}
               className="w-full border p-2 rounded"
-              required={field !== 'image_url'}
+              required
             />
           </div>
         ))}
+
+        <div>
+          <label className="block text-sm font-medium mb-1">Upload Cover Photo</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={async (e) => {
+              const file = e.target.files[0];
+              if (file) {
+                const url = await handleImageUpload(file);
+                if (url) setForm(f => ({ ...f, image_url: url }));
+              }
+            }}
+            className="w-full"
+          />
+          {form.image_url && <img src={form.image_url} className="mt-2 w-full h-40 object-cover rounded" />}
+        </div>
 
         <div>
           <label className="block text-sm font-medium mb-1">Ingredients (one per line)</label>

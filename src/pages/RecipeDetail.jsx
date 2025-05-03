@@ -12,7 +12,7 @@ export default function RecipeDetail() {
   const [form, setForm] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const isModerator = user?.email === 'johnhood2013@gmail.com'; // <-- update this
+  const isModerator = user?.email === 'your@email.com'; // <-- update this
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -155,4 +155,37 @@ export default function RecipeDetail() {
           />
         ) : (
           <ul className="list-disc list-inside">
-            {recipe.ingredients?.split('\n').
+            {recipe.ingredients?.split('\n').map((line, i) => <li key={i}>{line}</li>)}
+          </ul>
+        )}
+      </div>
+
+      <div className="mb-4">
+        <h2 className="text-lg font-semibold">Steps</h2>
+        {editMode ? (
+          <textarea
+            name="steps"
+            value={form.steps}
+            onChange={handleChange}
+            className="w-full border p-2"
+            rows={4}
+          />
+        ) : (
+          <ol className="list-decimal list-inside space-y-1">
+            {recipe.steps?.split('\n').map((step, i) => <li key={i}>{step}</li>)}
+          </ol>
+        )}
+      </div>
+
+      {editMode && (
+        <button
+          onClick={handleSave}
+          disabled={loading}
+          className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 disabled:opacity-50"
+        >
+          {loading ? 'Saving...' : 'Save Changes'}
+        </button>
+      )}
+    </div>
+  );
+}

@@ -7,6 +7,7 @@ import SubmitRecipe from './pages/SubmitRecipe';
 import ModerationPanel from './pages/ModerationPanel';
 import Cookbook from './pages/Cookbook';
 import AuthForm from './pages/AuthForm';
+import ResetPassword from './pages/ResetPassword';
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
         <Route path="/moderate" element={<ModerationPanel />} />
         <Route path="/cookbook" element={<Cookbook />} />
         <Route path="/login" element={<AuthForm />} />
+        <Route path="/reset" element={<ResetPassword />} />
       </Routes>
     </Layout>
   );

@@ -45,32 +45,32 @@ export default function RecipeDetail() {
     return publicUrl;
   };
 
-  const handleSave = async () => {
-    const { error } = await supabase
-      .from('recipes')
-      .update({
-        title: form.title,
-        ingredients: form.ingredients,
-        steps: form.steps,
-        cook_time: form.cook_time,
-        servings: form.servings,
-        tags: form.tags.split(',').map(t => t.trim()),
-        image_url: form.image_url
-      })
-      .eq('id', id);
+const handleSave = async () => {
+  console.log("Saving form:", form);
 
-    if (error) {
-        console.error("Save failed:", error);
-        alert("Save failed: " + error.message);
-    } else {
-        alert("Changes saved!");
-        setRecipe(form);
-        setEditMode(false);
-    }
+  const { error } = await supabase
+    .from('recipes')
+    .update({
+      title: form.title,
+      ingredients: form.ingredients,
+      steps: form.steps,
+      cook_time: form.cook_time,
+      servings: form.servings,
+      tags: form.tags.split(',').map(t => t.trim()),
+      image_url: form.image_url
+    })
+    .eq('id', id);
 
-      console.error("Save failed:", error);
-    }
-  };
+  if (error) {
+    console.error("Save failed:", error);
+    alert("❌ Save failed: " + error.message);
+  } else {
+    alert("✅ Changes saved!");
+    setRecipe(form);
+    setEditMode(false);
+  }
+};
+
 
   if (!recipe) return <p className="p-4">Loading recipe...</p>;
 

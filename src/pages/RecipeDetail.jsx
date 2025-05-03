@@ -1,8 +1,8 @@
 
-import {{ useEffect, useState }} from 'react';
-import {{ useParams }} from 'react-router-dom';
-import {{ supabase }} from '../lib/supabaseClient';
-import {{ useSession }} from '../lib/SessionContext';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { supabase } from '../lib/supabaseClient';
+import { useSession } from '../lib/SessionContext';
 
 export default function RecipeDetail() {{
   const {{ id }} = useParams();

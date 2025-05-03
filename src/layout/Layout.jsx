@@ -23,7 +23,7 @@ export default function Layout({ children }) {
         <div className="text-sm text-gray-600 space-x-2">
           {user ? (
             <>
-              <span>{user.email}</span>
+              <span>{user?.user_metadata?.name || user?.email}</span>
               <button onClick={handleLogout} className="underline text-red-600">Log out</button>
             </>
           ) : (

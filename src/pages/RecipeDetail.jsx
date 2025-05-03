@@ -12,7 +12,7 @@ export default function RecipeDetail() {
   const [form, setForm] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const isModerator = user?.email === 'your@email.com'; // <-- update this
+  const isModerator = user?.email === 'johnhood2013@gmail.com'; // <-- update this
 
   useEffect(() => {
     const fetchRecipe = async () => {

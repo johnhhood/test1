@@ -1,10 +1,9 @@
-
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { Link } from 'react-router-dom';
 
 export default function Home() {
-  const [recipes, setRecipes] = useState([]);
+  const [popularRecipes, setPopularRecipes] = useState([]);
 
   useEffect(() => {
     const fetchPopular = async () => {
@@ -12,29 +11,32 @@ export default function Home() {
         .from('recipes')
         .select('*')
         .eq('is_approved', true)
-        .order('view_count', { ascending: false })
+        .order('views', { ascending: false })
         .limit(6);
 
-      if (!error) setRecipes(data);
+      if (!error) setPopularRecipes(data);
     };
 
     fetchPopular();
   }, []);
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Popular Recipes</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {recipes.map(recipe => (
-          <Link to={`/recipes/${recipe.id}`} key={recipe.id} className="border rounded shadow hover:shadow-md transition block">
+    <div className="home">
+      <h1 className="home-title">Popular Recipes</h1>
+      <div className="popular-grid">
+        {popularRecipes.map(recipe => (
+          <Link to={`/recipes/${recipe.id}`} key={recipe.id} className="recipe-card">
             {recipe.image_url && (
-              <img src={recipe.image_url} alt={recipe.title} className="w-full h-48 object-cover rounded-t" />
+              <img
+                src={recipe.image_url}
+                alt={recipe.title}
+                className="recipe-image"
+              />
             )}
-            <div className="p-4">
-              <h2 className="text-lg font-semibold">{recipe.title}</h2>
-              {recipe.tags && (
-                <p className="text-sm text-gray-500">{recipe.tags.join(', ')}</p>
-              )}
+            <div className="recipe-card-content">
+              <h2 className="recipe-title">{recipe.title}</h2>
+              <p className="cook-time">⏱ {recipe.cook_time}</p>
+              <p className="tags">Tags: {recipe.tags?.join(', ')}</p>
             </div>
           </Link>
         ))}

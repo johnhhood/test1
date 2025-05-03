@@ -26,10 +26,19 @@ export default function SubmitRecipe() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-xl space-y-4">
-      {['title', 'cook_time', 'servings', 'tags', 'image_url'].map(field => (
-        <input key={field} name={field} value={form[field]} onChange={handleChange}
-               placeholder={field} className="w-full border p-2" />
+   <div className="max-w-lg mx-auto p-6 bg-white border rounded shadow">
+    <h2 className="text-xl font-bold mb-4">Submit a Recipe</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium mb-1">Title</label>
+          <input
+            type="text"
+            className="w-full border p-2 rounded"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
+        </div>
       ))}
       <textarea name="ingredients" value={form.ingredients} onChange={handleChange}
                 placeholder="Ingredients (one per line)" className="w-full border p-2" />
@@ -38,5 +47,6 @@ export default function SubmitRecipe() {
       <button className="bg-black text-white px-4 py-2">Submit</button>
       {message && <p className="text-sm text-green-600">{message}</p>}
     </form>
+  </div>
   );
 }

@@ -11,7 +11,7 @@ export default function RecipeDetail() {
   const [form, setForm] = useState(null);
 
   // ✅ Replace this with your actual moderator email
-  const isModerator = user?.email === 'your@email.com';
+  const isModerator = user?.email === 'johnhood2013@gmail.com';
 
   useEffect(() => {
     const fetchRecipe = async () => {

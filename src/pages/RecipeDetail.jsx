@@ -59,10 +59,15 @@ export default function RecipeDetail() {
       })
       .eq('id', id);
 
-    if (!error) {
-      setRecipe(form);
-      setEditMode(false);
+    if (error) {
+        console.error("Save failed:", error);
+        alert("Save failed: " + error.message);
     } else {
+        alert("Changes saved!");
+        setRecipe(form);
+        setEditMode(false);
+    }
+
       console.error("Save failed:", error);
     }
   };

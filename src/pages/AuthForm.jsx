@@ -90,7 +90,7 @@ export default function AuthForm() {
       onClick={async () => {
         if (!email) return toast.error("Enter your email first.");
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: 'https://your-deployed-url.vercel.app/reset' // ✅ change this
+          redirectTo: 'https://test1-umber-theta.vercel.app/' // ✅ change this
         });
         if (error) toast.error(error.message);
         else toast.success("Check your email for reset link.");

@@ -13,9 +13,10 @@ export default function Layout({ children }) {
     <div>
       <nav className="bg-gray-100 border-b p-4 flex justify-between items-center">
         <div className="space-x-4">
-          <Link to="/" className="font-bold">Jump to Recipe</Link>
-          <Link to="/recipes">A–Z Recipes</Link>
-          <Link to="/submit">Submit</Link>
+          <Link to="/" className="font-bold" className="text-gray-600 hover:text-black">Jump to Recipe</Link>
+          <Link to="/recipes" className="text-gray-600 hover:text-black">A–Z Recipes</Link>
+          <Link to="/submit" className="text-gray-600 hover:text-black">Submit</Link>
+          <Link to="/about" className="text-gray-600 hover:text-black">About</Link>
           {user && <Link to="/cookbook">My Cookbook</Link>}
           {user && <Link to="/moderate">Moderate</Link>}
         </div>

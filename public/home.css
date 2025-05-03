@@ -1,0 +1,48 @@
+.home {
+  padding: 1rem;
+}
+
+.home-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.popular-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.recipe-card {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 4px 4px 0 #999;
+  text-decoration: none;
+  color: black;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.recipe-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.recipe-card-content {
+  padding: 0.75rem;
+}
+
+.recipe-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.cook-time,
+.tags {
+  font-size: 0.9rem;
+}

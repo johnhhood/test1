@@ -83,6 +83,24 @@ export default function AuthForm() {
           {loading ? 'Working...' : mode === 'signup' ? 'Create Account' : 'Log In'}
         </button>
       </form>
+      
+{mode === 'login' && (
+  <div className="text-center mt-2">
+    <button
+      onClick={async () => {
+        if (!email) return toast.error("Enter your email first.");
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: 'https://your-deployed-url.vercel.app/reset' // ✅ change this
+        });
+        if (error) toast.error(error.message);
+        else toast.success("Check your email for reset link.");
+      }}
+      className="text-blue-600 underline text-sm"
+    >
+      Forgot password?
+    </button>
+  </div>
+)}
 
       <div className="mt-4 text-sm text-center">
         {mode === 'signup' ? (

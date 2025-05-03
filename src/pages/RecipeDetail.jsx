@@ -1,23 +1,24 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useSession } from '../lib/SessionContext';
 
 export default function RecipeDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { user } = useSession();
   const [recipe, setRecipe] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [form, setForm] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  // ✅ Replace this with your actual moderator email
-  const isModerator = user?.email === 'johnhood2013@gmail.com';
+  const isModerator = user?.email === 'johnhood2013@gmail.com'; // <-- update this
 
   useEffect(() => {
     const fetchRecipe = async () => {
       const { data } = await supabase.from('recipes').select('*').eq('id', id).single();
       setRecipe(data);
-      setForm(data); // pre-fill edit form
+      setForm(data);
     };
     fetchRecipe();
   }, [id]);
@@ -35,6 +36,7 @@ export default function RecipeDetail() {
 
     if (error) {
       console.error("Upload error:", error);
+      alert("Image upload failed: " + error.message);
       return null;
     }
 
@@ -45,32 +47,38 @@ export default function RecipeDetail() {
     return publicUrl;
   };
 
-const handleSave = async () => {
-  console.log("Saving form:", form);
+  const handleSave = async () => {
+    setLoading(true);
+    console.log("Saving form:", form);
 
-  const { error } = await supabase
-    .from('recipes')
-    .update({
-      title: form.title,
-      ingredients: form.ingredients,
-      steps: form.steps,
-      cook_time: form.cook_time,
-      servings: form.servings,
-      tags: form.tags.split(',').map(t => t.trim()),
-      image_url: form.image_url
-    })
-    .eq('id', id);
+    const parsedTags = Array.isArray(form.tags)
+      ? form.tags.map(tag => tag.trim())
+      : form.tags.split(',').map(tag => tag.trim());
 
-  if (error) {
-    console.error("Save failed:", error);
-    alert("❌ Save failed: " + error.message);
-  } else {
-    alert("✅ Changes saved!");
-    setRecipe(form);
-    setEditMode(false);
-  }
-};
+    const { error } = await supabase
+      .from('recipes')
+      .update({
+        title: form.title,
+        ingredients: form.ingredients,
+        steps: form.steps,
+        cook_time: form.cook_time,
+        servings: form.servings,
+        tags: parsedTags,
+        image_url: form.image_url
+      })
+      .eq('id', id);
 
+    setLoading(false);
+
+    if (error) {
+      console.error("Save failed:", error);
+      alert("❌ Save failed: " + error.message);
+    } else {
+      alert("✅ Changes saved!");
+      setEditMode(false);
+      navigate(`/recipes/${id}`); // 🔁 redirect to refresh the detail page
+    }
+  };
 
   if (!recipe) return <p className="p-4">Loading recipe...</p>;
 
@@ -114,7 +122,7 @@ const handleSave = async () => {
       {editMode && (
         <input
           name="tags"
-          value={form.tags}
+          value={Array.isArray(form.tags) ? form.tags.join(', ') : form.tags}
           onChange={handleChange}
           placeholder="comma-separated tags"
           className="w-full border p-1 mb-4"
@@ -147,33 +155,4 @@ const handleSave = async () => {
           />
         ) : (
           <ul className="list-disc list-inside">
-            {recipe.ingredients?.split('\n').map((line, i) => <li key={i}>{line}</li>)}
-          </ul>
-        )}
-      </div>
-
-      <div className="mb-4">
-        <h2 className="text-lg font-semibold">Steps</h2>
-        {editMode ? (
-          <textarea
-            name="steps"
-            value={form.steps}
-            onChange={handleChange}
-            className="w-full border p-2"
-            rows={4}
-          />
-        ) : (
-          <ol className="list-decimal list-inside space-y-1">
-            {recipe.steps?.split('\n').map((step, i) => <li key={i}>{step}</li>)}
-          </ol>
-        )}
-      </div>
-
-      {editMode && (
-        <button onClick={handleSave} className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800">
-          Save Changes
-        </button>
-      )}
-    </div>
-  );
-}
+            {recipe.ingredients?.split('\n').

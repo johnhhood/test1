@@ -6,7 +6,7 @@ import RecipeDetail from './pages/RecipeDetail';
 import SubmitRecipe from './pages/SubmitRecipe';
 import ModerationPanel from './pages/ModerationPanel';
 import Cookbook from './pages/Cookbook';
-import Login from './pages/Login';
+import AuthForm from './pages/AuthForm';
 
 export default function App() {
   return (
@@ -18,7 +18,7 @@ export default function App() {
         <Route path="/submit" element={<SubmitRecipe />} />
         <Route path="/moderate" element={<ModerationPanel />} />
         <Route path="/cookbook" element={<Cookbook />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<AuthForm />} />
       </Routes>
     </Layout>
   );

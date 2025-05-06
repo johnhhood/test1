@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { Link } from 'react-router-dom';
+import React from 'react';
+import RecipeList from './RecipeList';
 
 export default function Home() {
   const [popularRecipes, setPopularRecipes] = useState([]);

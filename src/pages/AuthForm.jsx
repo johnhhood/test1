@@ -1,120 +1,68 @@
-import { useState } from 'react';
-import { supabase } from '../lib/supabaseClient';
-import toast from 'react-hot-toast';
+.auth-container {
+  max-width: 500px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 4px 4px 0 #999;
+}
 
-export default function AuthForm() {
-  const [mode, setMode] = useState('login'); // or 'signup'
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
-  const [birthday, setBirthday] = useState('');
-  const [loading, setLoading] = useState(false);
+.auth-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-align: center;
+}
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
 
-    if (mode === 'signup') {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: { name, birthday }
-        }
-      });
+.auth-reset {
+  text-align: center;
+  margin-top: 1rem;
+}
 
-      if (error) toast.error('Signup failed: ' + error.message);
-      else toast.success('Signup successful! You can now log in.');
-    } else {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+.auth-toggle {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.95rem;
+}
 
-      if (error) toast.error('Login failed: ' + error.message);
-      else toast.success('Logged in!');
-    }
+.form-input {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #999;
+  border-radius: 4px;
+  background-color: #fefefe;
+}
 
-    setLoading(false);
-  };
+.form-button {
+  background-color: black;
+  color: white;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
 
-  return (
-    <div className="max-w-md mx-auto p-4 mt-12 border rounded">
-      <h2 className="text-xl font-bold mb-4">{mode === 'signup' ? 'Sign Up' : 'Log In'}</h2>
+.form-button:hover {
+  background-color: #333;
+}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {mode === 'signup' && (
-          <>
-            <input
-              type="text"
-              placeholder="Your name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full border p-2"
-              required
-            />
-            <input
-              type="date"
-              value={birthday}
-              onChange={(e) => setBirthday(e.target.value)}
-              className="w-full border p-2"
-              required
-            />
-          </>
-        )}
-        <input
-          type="email"
-          placeholder="you@example.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full border p-2"
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full border p-2"
-          required
-        />
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-black text-white px-4 py-2 w-full"
-        >
-          {loading ? 'Working...' : mode === 'signup' ? 'Create Account' : 'Log In'}
-        </button>
-      </form>
-      
-{mode === 'login' && (
-  <div className="text-center mt-2">
-    <button
-      onClick={async () => {
-        if (!email) return toast.error("Enter your email first.");
-        const { error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: 'https://test1-umber-theta.vercel.app/' // ✅ change this
-        });
-        if (error) toast.error(error.message);
-        else toast.success("Check your email for reset link.");
-      }}
-      className="text-blue-600 underline text-sm"
-    >
-      Forgot password?
-    </button>
-  </div>
-)}
+.full-width {
+  width: 100%;
+}
 
-      <div className="mt-4 text-sm text-center">
-        {mode === 'signup' ? (
-          <>
-            Already have an account?{' '}
-            <button onClick={() => setMode('login')} className="text-blue-600 underline">Log in</button>
-          </>
-        ) : (
-          <>
-            New here?{' '}
-            <button onClick={() => setMode('signup')} className="text-blue-600 underline">Sign up</button>
-          </>
-        )}
-      </div>
-    </div>
-  );
+.link-button {
+  background: none;
+  border: none;
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.9rem;
 }

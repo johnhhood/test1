@@ -16,11 +16,14 @@ export default function App() {
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+   useEffect(() => {
     async function fetchRecipes() {
       const { data, error } = await supabase.from('recipes').select('*');
-      if (error) console.error('Error fetching recipes:', error);
-      else setRecipes(data || []);
+      if (error) {
+        console.error('Error fetching recipes:', error.message);
+      } else {
+        setRecipes(data);
+      }
       setLoading(false);
     }
     fetchRecipes();

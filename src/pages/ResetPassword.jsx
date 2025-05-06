@@ -30,21 +30,21 @@ export default function ResetPassword() {
     }
   };
 
-  if (!confirmed) return <p className="p-4">Verifying reset link...</p>;
+  if (!confirmed) return <p className="reset-loading">Verifying reset link...</p>;
 
   return (
-    <div className="max-w-md mx-auto p-4 mt-12 border rounded">
-      <h2 className="text-xl font-bold mb-4">Set a New Password</h2>
-      <form onSubmit={handleReset} className="space-y-4">
+    <div className="auth-container">
+      <h2 className="auth-title">Set a New Password</h2>
+      <form onSubmit={handleReset} className="auth-form">
         <input
           type="password"
           placeholder="New password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full border p-2"
+          className="form-input"
           required
         />
-        <button type="submit" className="bg-black text-white px-4 py-2 w-full">
+        <button type="submit" className="form-button full-width">
           Update Password
         </button>
       </form>

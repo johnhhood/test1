@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function RecipeList({ recipes = [] }) {
   if (!recipes.length) return <p>No recipes found.</p>;
 

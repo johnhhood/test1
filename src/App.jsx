@@ -1,4 +1,6 @@
+import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { supabase } from './supabaseClient';
 import Layout from './layout/Layout';
 import Home from './pages/Home';
 import RecipeList from './pages/RecipeList';
@@ -11,11 +13,26 @@ import ResetPassword from './pages/ResetPassword';
 import About from './pages/About';
 
 export default function App() {
+  const [recipes, setRecipes] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchRecipes() {
+      const { data, error } = await supabase.from('recipes').select('*');
+      if (error) console.error('Error fetching recipes:', error);
+      else setRecipes(data || []);
+      setLoading(false);
+    }
+    fetchRecipes();
+  }, []);
+
+  if (loading) return <p>Loading site...</p>;
+
   return (
     <Layout>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/recipes" element={<RecipeList />} />
+        <Route path="/" element={<Home recipes={recipes} />} />
+        <Route path="/recipes" element={<RecipeList recipes={recipes} />} />
         <Route path="/recipes/:id" element={<RecipeDetail />} />
         <Route path="/submit" element={<SubmitRecipe />} />
         <Route path="/moderate" element={<ModerationPanel />} />

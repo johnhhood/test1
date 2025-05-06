@@ -13,14 +13,8 @@ export default function Home() {
         .from('recipes')
         .select('*')
         .eq('is_approved', true)
+        .gte('views', 0)
         .order('views', { ascending: false })
-        .limit(6);
-      const { data, error } = await supabase
-        .from('recipes')
-        .select('*')
-        .eq('is_approved', true)
-        .order('created_at', { ascending: false })
-        .limit(6);
 
       if (!error) setPopularRecipes(data);
     };

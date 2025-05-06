@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
+export default function RecipeList({ recipes = [] }) {
+  if (!recipes.length) return <p>No recipes found.</p>;
 
-export default function RecipeList({ recipes }) {
   return (
     <div className="recipe-list">
       {recipes.map(r => (

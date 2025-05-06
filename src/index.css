@@ -7,16 +7,15 @@
 
 body {
   font-family: "Comic Sans MS", cursive, sans-serif;
-  background-color: #f0f0f0; /* sitebg */
+  background-color: #f0f0f0; /* site background */
   color: #111827;
 }
 
-/* Layout container */
+/* ===== Layout ===== */
 .layout {
   display: flex;
   height: 100vh;
   background-color: #f0f0f0;
-  font-family: "Comic Sans MS", cursive, sans-serif;
 }
 
 .sidebar {
@@ -56,6 +55,11 @@ body {
   border-bottom: 2px solid black;
 }
 
+.site-title {
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
 .logout-button {
   margin-left: 1rem;
   color: red;
@@ -81,3 +85,89 @@ main {
   box-shadow: 4px 4px 0 #999;
   overflow-y: auto;
 }
+
+/* ===== Home & Recipe Cards ===== */
+.home {
+  padding: 1rem;
+}
+
+.home-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.popular-grid,
+.cookbook-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.recipe-card,
+.cookbook-card {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 4px 4px 0 #999;
+  text-decoration: none;
+  color: black;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  transition: box-shadow 0.2s ease;
+}
+
+.recipe-card:hover,
+.cookbook-card:hover {
+  box-shadow: 2px 2px 6px #888;
+}
+
+.recipe-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.recipe-card-content {
+  padding: 0.75rem;
+}
+
+.recipe-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.cook-time,
+.tags {
+  font-size: 0.9rem;
+}
+
+/* ===== Recipe Detail ===== */
+.recipe-detail {
+  max-width: 720px;
+  margin: 2rem auto;
+  background-color: white;
+  padding: 1.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 4px 4px 0 #999;
+}
+
+.recipe-meta {
+  margin-bottom: 1rem;
+}
+
+.recipe-ingredients,
+.recipe-steps {
+  margin-top: 1.25rem;
+}
+
+.recipe-ingredients ul,
+.recipe-steps ol {
+  padding-left: 1.25rem;
+}
+
+.recipe-

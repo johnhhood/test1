@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useSession } from '../lib/SessionContext';
 
-// Helper to sanitize uploaded filenames
+// Sanitize image filename
 function sanitizeFilename(name) {
   return name
     .toLowerCase()
-    .replace(/\s+/g, '-')          // spaces to dashes
-    .replace(/[^a-z0-9.-]/g, '')   // remove special chars except . and -
-    .replace(/-+/g, '-');          // remove duplicate dashes
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9.-]/g, '')
+    .replace(/-+/g, '-');
 }
 
 export default function SubmitRecipe() {
@@ -48,6 +48,8 @@ export default function SubmitRecipe() {
 
     if (file) {
       const filename = `${user.id}/${sanitizeFilename(file.name)}`;
+      setUploadProgress(0);
+
       const { data, error: uploadError } = await supabase.storage
         .from('recipe-images')
         .upload(filename, file, {
@@ -63,17 +65,25 @@ export default function SubmitRecipe() {
       imageUrl = supabase.storage
         .from('recipe-images')
         .getPublicUrl(filename).data.publicUrl;
+
+      setUploadProgress(100);
     }
 
     const recipeData = {
       title: form.title.trim(),
-      ingredients: form.ingredients.trim(),
-      steps: form.steps.trim(),
-      cook_time: form.cook_time,
-      servings: parseInt(form.servings, 10),
+      ingredients: form.ingredients
+        .split('\n')
+        .map(line => line.trim())
+        .filter(Boolean),
+      steps: form.steps
+        .split('\n')
+        .map(step => step.trim())
+        .filter(Boolean),
+      cook_time: form.cook_time.trim(),
+      servings: parseInt(form.servings, 10) || null,
       tags: form.tags
         .split(',')
-        .map((tag) => tag.trim())
+        .map(tag => tag.trim())
         .filter(Boolean),
       image_url: imageUrl,
       author_id: user.id
@@ -90,83 +100,33 @@ export default function SubmitRecipe() {
   };
 
   return (
-    <div className="submit-container">
-      <h2 className="submit-title">Submit a Recipe</h2>
-      <form onSubmit={handleSubmit} className="submit-form">
-        <input
-          type="text"
-          name="title"
-          placeholder="Title"
-          value={form.title}
-          onChange={handleChange}
-          className="form-input"
-          required
-        />
-        <textarea
-          name="ingredients"
-          placeholder="Ingredients (one per line)"
-          value={form.ingredients}
-          onChange={handleChange}
-          className="form-textarea"
-          required
-        />
-        <textarea
-          name="steps"
-          placeholder="Steps (one per line)"
-          value={form.steps}
-          onChange={handleChange}
-          className="form-textarea"
-          required
-        />
-        <input
-          type="text"
-          name="cook_time"
-          placeholder="Cook time"
-          value={form.cook_time}
-          onChange={handleChange}
-          className="form-input"
-        />
-        <input
-          type="number"
-          name="servings"
-          placeholder="Servings"
-          value={form.servings}
-          onChange={handleChange}
-          className="form-input"
-        />
-        <input
-          type="text"
-          name="tags"
-          placeholder="Comma-separated tags"
-          value={form.tags}
-          onChange={handleChange}
-          className="form-input"
-        />
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          className="form-input"
-        />
+    <div className="submit-container" style={{ padding: 40 }}>
+      <h2>Submit a Recipe</h2>
+      <form onSubmit={handleSubmit} className="submit-form" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <input type="text" name="title" placeholder="Title" value={form.title} onChange={handleChange} required />
+        <textarea name="ingredients" placeholder="Ingredients (one per line)" value={form.ingredients} onChange={handleChange} required />
+        <textarea name="steps" placeholder="Steps (one per line)" value={form.steps} onChange={handleChange} required />
+        <input type="text" name="cook_time" placeholder="Cook time" value={form.cook_time} onChange={handleChange} />
+        <input type="number" name="servings" placeholder="Servings" value={form.servings} onChange={handleChange} />
+        <input type="text" name="tags" placeholder="Comma-separated tags" value={form.tags} onChange={handleChange} />
+        <input type="file" accept="image/*" onChange={handleFileChange} />
 
         {previewURL && (
-          <div className="preview">
+          <div>
             <p>Image Preview:</p>
-            <img src={previewURL} alt="Preview" style={{ maxWidth: '200px', marginBottom: '1rem' }} />
+            <img src={previewURL} alt="Preview" style={{ maxWidth: '200px' }} />
           </div>
         )}
 
         {uploadProgress !== null && (
-          <div className="progress-bar">
+          <div>
             <p>Uploading: {uploadProgress}%</p>
             <progress value={uploadProgress} max="100" />
           </div>
         )}
 
-        <button type="submit" className="form-button">
-          Submit
-        </button>
-        {message && <p className="form-message">{message}</p>}
+        <button type="submit">Submit</button>
+        {message && <p>{message}</p>}
       </form>
     </div>
   );

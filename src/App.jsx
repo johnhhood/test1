@@ -9,8 +9,13 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
+          <Route path="recipes" element={<RecipeList />} />
+          <Route path="submit" element={<SubmitRecipe />} />
+          <Route path="about" element={<About />} />
+          <Route path="cookbook" element={<Cookbook />} />
+          <Route path="moderate" element={<ModerationPanel />} />
         </Route>
-        <Route path="/login" element={<Login />} />  {/* Add this route */}
+        <Route path="/login" element={<Login />} />
       </Routes>
     </Router>
   );

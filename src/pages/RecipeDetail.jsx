@@ -1,27 +1,53 @@
-export default function RecipeDetail({ recipe }) {
-  if (!recipe) return <p className="loading-message">Loading...</p>;
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { supabase } from '../lib/supabaseClient';
+
+export default function RecipeDetail() {
+  const { id } = useParams();
+  const [recipe, setRecipe] = useState(null);
+
+  useEffect(() => {
+    const fetchAndIncrement = async () => {
+      // Fetch the recipe
+      const { data, error } = await supabase
+        .from('recipes')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (error) {
+        console.error('Error fetching recipe:', error.message);
+        return;
+      }
+
+      setRecipe(data);
+
+      // Increment view_count
+      const { error: updateError } = await supabase
+        .from('recipes')
+        .update({ view_count: (data.view_count || 0) + 1 })
+        .eq('id', id);
+
+      if (updateError) {
+        console.error('Error incrementing view count:', updateError.message);
+      }
+    };
+
+    fetchAndIncrement();
+  }, [id]);
+
+  if (!recipe) return <p>Loading recipe...</p>;
 
   return (
     <div className="recipe-detail">
-      <h1 className="recipe-title">{recipe.title}</h1>
-      {recipe.image_url && <img src={recipe.image_url} alt={recipe.title} className="recipe-image" />}
-      <div className="recipe-meta">
-        <p><strong>Cook Time:</strong> {recipe.cook_time}</p>
-        <p><strong>Servings:</strong> {recipe.servings}</p>
-        <p><strong>Tags:</strong> {recipe.tags?.join(', ')}</p>
-      </div>
-      <div className="recipe-ingredients">
-        <h2>Ingredients</h2>
-        <ul>
-          {recipe.ingredients?.split('\n').map((line, i) => <li key={i}>{line}</li>)}
-        </ul>
-      </div>
-      <div className="recipe-steps">
-        <h2>Steps</h2>
-        <ol>
-          {recipe.steps?.split('\n').map((step, i) => <li key={i}>{step}</li>)}
-        </ol>
-      </div>
+      <h1>{recipe.title}</h1>
+      {recipe.image_url && (
+        <img src={recipe.image_url} alt={recipe.title} className="recipe-image" />
+      )}
+      <p>Cook Time: {recipe.cook_time}</p>
+      <p>Tags: {recipe.tags?.join(', ')}</p>
+      <p>Views: {recipe.view_count}</p>
+      {/* Add more recipe details as needed */}
     </div>
   );
 }

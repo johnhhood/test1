@@ -1,30 +1,80 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useSession } from '../lib/SessionContext';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function SubmitRecipe() {
   const { user } = useSession();
   const [form, setForm] = useState({
-    title: '', ingredients: '', steps: '', cook_time: '', servings: '', tags: '', image_url: ''
+    title: '',
+    ingredients: '',
+    steps: '',
+    cook_time: '',
+    servings: '',
+    tags: ''
   });
+  const [file, setFile] = useState(null);
   const [message, setMessage] = useState('');
 
   const handleChange = e => {
     setForm(f => ({ ...f, [e.target.name]: e.target.value }));
   };
 
+  const handleFileChange = e => {
+    setFile(e.target.files[0]);
+  };
+
   const handleSubmit = async e => {
     e.preventDefault();
     if (!user) return alert("Login required");
 
-    const { error } = await supabase.from('recipes').insert([{
+    let imageUrl = null;
+
+    if (file) {
+      const filename = `${uuidv4()}-${file.name}`;
+      const { error: uploadError } = await supabase
+        .storage
+        .from('recipe-images')
+        .upload(filename, file);
+
+      if (uploadError) {
+        console.error('Image upload error:', uploadError.message);
+        setMessage('❌ Failed to upload image.');
+        return;
+      }
+
+      imageUrl = `${supabase.storage.from('recipe-images').getPublicUrl(filename).data.publicUrl}`;
+    }
+
+    const recipeData = {
       ...form,
       author_id: user.id,
-      tags: form.tags.split(',').map(tag => tag.trim()),
-      is_approved: false
-    }]);
+      tags: form.tags
+        .split(',')
+        .map(tag => tag.trim())
+        .filter(Boolean),
+      ingredients: form.ingredients.trim(),
+      steps: form.steps.trim(),
+      image_url: imageUrl
+    };
 
-    setMessage(error ? 'Failed to submit.' : 'Recipe submitted for review!');
+    const { error } = await supabase.from('recipes').insert([recipeData]);
+
+    if (error) {
+      console.error('Submit error:', error.message);
+      setMessage('❌ Failed to submit.');
+    } else {
+      setMessage('✅ Recipe submitted for review!');
+      setForm({
+        title: '',
+        ingredients: '',
+        steps: '',
+        cook_time: '',
+        servings: '',
+        tags: ''
+      });
+      setFile(null);
+    }
   };
 
   return (
@@ -38,6 +88,7 @@ export default function SubmitRecipe() {
           value={form.title}
           onChange={handleChange}
           className="form-input"
+          required
         />
         <textarea
           name="ingredients"
@@ -45,6 +96,7 @@ export default function SubmitRecipe() {
           value={form.ingredients}
           onChange={handleChange}
           className="form-textarea"
+          required
         />
         <textarea
           name="steps"
@@ -52,6 +104,7 @@ export default function SubmitRecipe() {
           value={form.steps}
           onChange={handleChange}
           className="form-textarea"
+          required
         />
         <input
           type="text"
@@ -75,6 +128,12 @@ export default function SubmitRecipe() {
           placeholder="Comma-separated tags"
           value={form.tags}
           onChange={handleChange}
+          className="form-input"
+        />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
           className="form-input"
         />
         <button type="submit" className="form-button">Submit</button>

@@ -3,7 +3,9 @@ import { useSession } from '../lib/SessionContext';
 import { supabase } from '../lib/supabaseClient';
 
 export default function Layout() {
-  const { user } = useSession();
+  const { user, loading } = useSession();
+  if (loading) return <p>Loading session...</p>;
+
 
   const handleLogout = async () => {
     await supabase.auth.signOut();

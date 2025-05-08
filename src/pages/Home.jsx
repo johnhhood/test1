@@ -31,7 +31,7 @@ export default function Home() {
     <div className="home">
       <h1 className="home-title">Popular Recipes</h1>
       <div className="popular-grid">
-        {popularRecipes.map(recipe => (
+        {Array.isArray(popularRecipes) && popularRecipes.map(...)}
           <Link to={`/recipes/${recipe.id}`} key={recipe.id} className="recipe-card">
             {recipe.image_url && (
               <img

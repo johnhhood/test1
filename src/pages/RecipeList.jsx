@@ -13,8 +13,9 @@ export default function RecipeList({ recipes = [] }) {
           <div className="recipe-card-content">
             <h2 className="recipe-title">{r.title}</h2>
             <p className="cook-time">⏱ {r.cook_time}</p>
-            {r.tags?.length > 0 && (
-              <p className="tags">Tags: {r.tags.join(', ')}</p>
+            {Array.isArray(r.tags) && r.tags.length > 0 && (
+            <p className="tags">Tags: {r.tags.join(', ')}</p>
+            )}
             )}
           </div>
         </Link>

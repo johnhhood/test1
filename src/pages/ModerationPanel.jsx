@@ -5,3 +5,12 @@ export default function Moderate() {
     </div>
   );
 }
+const fetchPending = async () => {
+  const { data, error } = await supabase
+    .from('recipes')
+    .select('*')
+    .eq('is_approved', false);
+
+  if (error) console.error('Error fetching pending recipes:', error.message);
+  else setPendingRecipes(data);
+};

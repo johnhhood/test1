@@ -45,7 +45,9 @@ export default function Layout() {
           </div>
         </div>
       </div>
-      <Outlet />
+        <main>
+          <Outlet />
+        </main>
     </div>
   );
 }

@@ -8,7 +8,6 @@ export default function RecipeDetail() {
 
   useEffect(() => {
     const fetchAndIncrement = async () => {
-      // Fetch the recipe
       const { data, error } = await supabase
         .from('recipes')
         .select('*')
@@ -41,14 +40,46 @@ export default function RecipeDetail() {
   return (
     <div className="recipe-detail">
       <h1>{recipe.title}</h1>
+
       {recipe.image_url && (
-        <img src={recipe.image_url} alt={recipe.title} className="recipe-image" />
+        <img
+          src={recipe.image_url}
+          alt={recipe.title}
+          className="recipe-image"
+        />
       )}
+
       <p>Cook Time: {recipe.cook_time}</p>
-      <p>Tags: {recipe.tags?.join(', ')}</p>
-      <p>Ingredients: {recipe.ingredients}</p>
-      <p>Steps {recipe.steps}</p>
-      {/* Add more recipe details as needed */}
+
+      {Array.isArray(recipe.tags) && (
+        <p>Tags: {recipe.tags.join(', ')}</p>
+      )}
+
+      {Array.isArray(recipe.ingredients) ? (
+        <div>
+          <h2>Ingredients:</h2>
+          <ul>
+            {recipe.ingredients.map((item, i) => (
+              <li key={i}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <p>Ingredients: {recipe.ingredients}</p>
+      )}
+
+      {Array.isArray(recipe.steps) ? (
+        <div>
+          <h2>Steps:</h2>
+          <ol>
+            {recipe.steps.map((step, i) => (
+              <li key={i}>{step}</li>
+            ))}
+          </ol>
+        </div>
+      ) : (
+        <p>Steps: {recipe.steps}</p>
+      )}
     </div>
   );
 }

@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function AuthForm() {
   const [mode, setMode] = useState('login'); // or 'signup'
@@ -9,6 +11,8 @@ export default function AuthForm() {
   const [name, setName] = useState('');
   const [birthday, setBirthday] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,11 +30,17 @@ export default function AuthForm() {
       if (error) toast.error('Signup failed: ' + error.message);
       else toast.success('Signup successful! You can now log in.');
     } else {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const { error } = await supabase.auth.signInWithPassword({ 
+        email, 
+        password
+      });
 
-      if (error) toast.error('Login failed: ' + error.message);
-      else toast.success('Logged in!');
-    }
+      if (error) {
+    setError(error.message);
+  } else {
+    navigate('/');
+  }
+};
 
     setLoading(false);
   };

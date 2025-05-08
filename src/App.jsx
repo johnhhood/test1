@@ -7,7 +7,7 @@ import SubmitRecipe from './pages/SubmitRecipe';
 import About from './pages/About';
 import Cookbook from './pages/Cookbook';
 import ModerationPanel from './pages/ModerationPanel';
-
+import RecipeDetail from './pages/RecipeDetail'; // ✅ Don't forget this import
 
 export default function App() {
   return (
@@ -16,6 +16,7 @@ export default function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="recipes" element={<RecipeList />} />
+          <Route path="recipes/:id" element={<RecipeDetail />} /> {/* ✅ Add this */}
           <Route path="submit" element={<SubmitRecipe />} />
           <Route path="about" element={<About />} />
           <Route path="cookbook" element={<Cookbook />} />

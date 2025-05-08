@@ -1,6 +1,27 @@
 import { Link } from 'react-router-dom';
 import { useSession } from '../lib/SessionContext';
 import { supabase } from '../lib/supabaseClient';
+import { Outlet } from 'react-router-dom';
+
+export default function Layout() {
+  return (
+    <div className="layout">
+      <aside className="sidebar">
+        <nav>
+          <a href="/">Home</a>
+          <a href="/recipes">Recipes</a>
+          <a href="/about">About</a>
+        </nav>
+      </aside>
+      <main className="main-content">
+        <header className="site-header">
+          <img src="/logo-banner.png" alt="Jump to Recipe Logo" className="logo-banner" />
+        </header>
+        <Outlet />
+      </main>
+    </div>
+  );
+}
 
 export default function Layout({ children }) {
   const { user } = useSession();

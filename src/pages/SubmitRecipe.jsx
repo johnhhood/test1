@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useSession } from '../lib/SessionContext';
 
@@ -13,6 +14,8 @@ function sanitizeFilename(name) {
 
 export default function SubmitRecipe() {
   const { user } = useSession();
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     title: '',
     ingredients: '',
@@ -21,7 +24,10 @@ export default function SubmitRecipe() {
     servings: '',
     tags: ''
   });
+
   const [file, setFile] = useState(null);
+  const [previewURL, setPreviewURL] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(null);
   const [message, setMessage] = useState('');
 
   const handleChange = (e) => {
@@ -29,7 +35,9 @@ export default function SubmitRecipe() {
   };
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    const selected = e.target.files[0];
+    setFile(selected);
+    setPreviewURL(URL.createObjectURL(selected));
   };
 
   const handleSubmit = async (e) => {
@@ -38,13 +46,13 @@ export default function SubmitRecipe() {
 
     let imageUrl = null;
 
-    // Upload image file (if provided)
     if (file) {
       const filename = `${user.id}/${sanitizeFilename(file.name)}`;
-      const { error: uploadError } = await supabase
-        .storage
+      const { data, error: uploadError } = await supabase.storage
         .from('recipe-images')
-        .upload(filename, file, { upsert: true });
+        .upload(filename, file, {
+          upsert: true
+        });
 
       if (uploadError) {
         console.error('Image upload error:', uploadError.message);
@@ -69,7 +77,6 @@ export default function SubmitRecipe() {
         .filter(Boolean),
       image_url: imageUrl,
       author_id: user.id
-      // status and is_approved will default in DB
     };
 
     const { error } = await supabase.from('recipes').insert([recipeData]);
@@ -78,16 +85,7 @@ export default function SubmitRecipe() {
       console.error('Submit error:', error.message);
       setMessage('❌ Failed to submit recipe.');
     } else {
-      setMessage('✅ Recipe submitted and is pending moderation!');
-      setForm({
-        title: '',
-        ingredients: '',
-        steps: '',
-        cook_time: '',
-        servings: '',
-        tags: ''
-      });
-      setFile(null);
+      navigate('/submitted');
     }
   };
 
@@ -150,6 +148,21 @@ export default function SubmitRecipe() {
           onChange={handleFileChange}
           className="form-input"
         />
+
+        {previewURL && (
+          <div className="preview">
+            <p>Image Preview:</p>
+            <img src={previewURL} alt="Preview" style={{ maxWidth: '200px', marginBottom: '1rem' }} />
+          </div>
+        )}
+
+        {uploadProgress !== null && (
+          <div className="progress-bar">
+            <p>Uploading: {uploadProgress}%</p>
+            <progress value={uploadProgress} max="100" />
+          </div>
+        )}
+
         <button type="submit" className="form-button">
           Submit
         </button>

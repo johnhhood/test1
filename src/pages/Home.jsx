@@ -26,33 +26,8 @@ export default function Home() {
     fetchPopular();
   }, []);
 
-  return (
-    <div className="home">
-      <h1 className="home-title">Popular Recipes</h1>
-      <div className="popular-grid">
-        {Array.isArray(popularRecipes) && popularRecipes.length > 0 ? (
-          popularRecipes.map(recipe => (
-            <Link to={`/recipes/${recipe.id}`} key={recipe.id} className="recipe-card">
-              {recipe.image_url && (
-                <img
-                  src={recipe.image_url}
-                  alt={recipe.title}
-                  className="recipe-image"
-                />
-              )}
-              <div className="recipe-card-content">
-                <h2 className="recipe-title">{recipe.title}</h2>
-                <p className="cook-time">⏱ {recipe.cook_time}</p>
-                {Array.isArray(recipe.tags) && (
-                  <p className="tags">Tags: {recipe.tags.join(', ')}</p>
-                )}
-              </div>
-            </Link>
-          ))
-        ) : (
-          <p>No recipes found.</p>
-        )}
-      </div>
-    </div>
-  );
-}
+ return (
+  <div style={{ background: 'pink', padding: 40, fontSize: '1.5rem' }}>
+    ✅ Home component loaded
+  </div>
+);

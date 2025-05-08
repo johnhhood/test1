@@ -5,7 +5,7 @@ export default function RecipeList({ recipes = [] }) {
 
   return (
     <div className="recipe-list">
-      {recipes.map(r => (
+      {Array.isArray(popularRecipes) && popularRecipes.map(...)}
         <Link to={`/recipes/${r.id}`} key={r.id} className="recipe-card">
           {r.image_url && (
             <img src={r.image_url} alt={r.title} className="recipe-image" />
@@ -13,8 +13,8 @@ export default function RecipeList({ recipes = [] }) {
           <div className="recipe-card-content">
             <h2 className="recipe-title">{r.title}</h2>
             <p className="cook-time">⏱ {r.cook_time}</p>
-            {Array.isArray(r.tags) && r.tags.length > 0 && (
-            <p className="tags">Tags: {r.tags.join(', ')}</p>
+            {Array.isArray(recipe.tags) && (
+              <p>Tags: {recipe.tags.join(', ')}</p>
             )}
             )}
           </div>

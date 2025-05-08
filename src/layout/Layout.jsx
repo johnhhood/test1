@@ -46,7 +46,32 @@ export default function Layout() {
         </div>
       </div>
         <main>
-          <Outlet />
+          
+          <div className="main-content">
+  <header className="site-header">
+    <img src="/logo-banner.png" alt="Jump to Recipe Logo" className="logo-banner" />
+  </header>
+
+  <div className="header">
+    <div className="site-title">Jump to Recipe</div>
+    <div className="user-status">
+      {user ? (
+        <>
+          <span>{user?.user_metadata?.name || user?.email}</span>
+          <button onClick={handleLogout} className="logout-button">Log out</button>
+        </>
+      ) : (
+        <Link to="/login" className="login-link">Log in</Link>
+      )}
+    </div>
+  </div>
+
+  {/* 🔥 Temporary hardcoded test content */}
+  <main style={{ background: 'limegreen', padding: '2rem', fontSize: '1.5rem' }}>
+    ✅ Layout loaded — Outlet is bypassed.
+  </main>
+</div>
+
         </main>
     </div>
   );

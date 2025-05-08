@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { Link } from 'react-router-dom';
 import React from 'react';
-import RecipeList from './RecipeList';
 
 export default function Home() {
   const [popularRecipes, setPopularRecipes] = useState([]);
@@ -18,38 +17,41 @@ export default function Home() {
         .limit(6);
 
       if (error) {
-      console.error('Popular fetch error:', error.message);
-    } else {
-      setPopularRecipes(data);
-    }
-  };
+        console.error('Popular fetch error:', error.message);
+      } else {
+        setPopularRecipes(data);
+      }
+    };
 
-  fetchPopular();
-}, []);
+    fetchPopular();
+  }, []);
 
   return (
     <div className="home">
       <h1 className="home-title">Popular Recipes</h1>
       <div className="popular-grid">
-        {Array.isArray(popularRecipes) && popularRecipes.map(...)}
-          <Link to={`/recipes/${recipe.id}`} key={recipe.id} className="recipe-card">
-            {recipe.image_url && (
-              <img
-                src={recipe.image_url}
-                alt={recipe.title}
-                className="recipe-image"
-              />
-            )}
-            <div className="recipe-card-content">
-              <h2 className="recipe-title">{recipe.title}</h2>
-              <p className="cook-time">⏱ {recipe.cook_time}</p>
-                {Array.isArray(recipe.tags) && (
-                <p>Tags: {recipe.tags.join(', ')}</p>
-                )}
+        {Array.isArray(popularRecipes) && popularRecipes.length > 0 ? (
+          popularRecipes.map(recipe => (
+            <Link to={`/recipes/${recipe.id}`} key={recipe.id} className="recipe-card">
+              {recipe.image_url && (
+                <img
+                  src={recipe.image_url}
+                  alt={recipe.title}
+                  className="recipe-image"
+                />
               )}
-            </div>
-          </Link>
-        ))}
+              <div className="recipe-card-content">
+                <h2 className="recipe-title">{recipe.title}</h2>
+                <p className="cook-time">⏱ {recipe.cook_time}</p>
+                {Array.isArray(recipe.tags) && (
+                  <p className="tags">Tags: {recipe.tags.join(', ')}</p>
+                )}
+              </div>
+            </Link>
+          ))
+        ) : (
+          <p>No recipes found.</p>
+        )}
       </div>
     </div>
   );

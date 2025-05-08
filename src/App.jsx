@@ -42,7 +42,7 @@ export default function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<div>✅ Home placeholder loaded</div>} />
+            <Route index element={<Home recipes={recipes} />} />
             <Route path="recipes" element={<RecipeList recipes={recipes} />} />
             <Route path="recipes/:id" element={<RecipeDetail />} />
             <Route path="submit" element={<SubmitRecipe />} />

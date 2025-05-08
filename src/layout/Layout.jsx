@@ -1,7 +1,6 @@
 import { Link, Outlet } from 'react-router-dom';
 import { useSession } from '../lib/SessionContext';
 import { supabase } from '../lib/supabaseClient';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 export default function Layout() {
   const { user } = useSession();

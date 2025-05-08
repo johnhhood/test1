@@ -9,7 +9,6 @@ export const SessionProvider = ({ children }) => {
 
   useEffect(() => {
     const initSession = async () => {
-      // First, get current session (from cookie)
       const {
         data: { session },
         error,
@@ -33,8 +32,8 @@ export const SessionProvider = ({ children }) => {
   }, []);
 
   return (
-    <SessionContext.Provider value={{ user }}>
-      {!loading && children}
+    <SessionContext.Provider value={{ user, loading }}>
+      {children}
     </SessionContext.Provider>
   );
 };

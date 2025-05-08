@@ -19,35 +19,45 @@ export default function App() {
 
   useEffect(() => {
     async function fetchRecipes() {
+      console.log("Fetching recipes...");
       const { data, error } = await supabase.from('recipes').select('*');
+
       if (error) {
-        console.error('Error fetching recipes:', error.message);
+        console.error("Supabase fetch error:", error.message);
       } else {
+        console.log("Recipes fetched:", data);
         setRecipes(data);
       }
+
       setLoading(false);
     }
+
     fetchRecipes();
   }, []);
 
   if (loading) return <p>Loading site...</p>;
 
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home recipes={recipes} />} />
-          <Route path="recipes" element={<RecipeList recipes={recipes} />} />
-          <Route path="recipes/:id" element={<RecipeDetail />} />
-          <Route path="submit" element={<SubmitRecipe />} />
-          <Route path="moderate" element={<ModerationPanel />} />
-          <Route path="cookbook" element={<Cookbook />} />
-          <Route path="about" element={<About />} />
-          <Route path="submitted" element={<Submitted />} />
-           </Route>
+  try {
+    return (
+      <Router>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home recipes={recipes} />} />
+            <Route path="recipes" element={<RecipeList recipes={recipes} />} />
+            <Route path="recipes/:id" element={<RecipeDetail />} />
+            <Route path="submit" element={<SubmitRecipe />} />
+            <Route path="moderate" element={<ModerationPanel />} />
+            <Route path="cookbook" element={<Cookbook />} />
+            <Route path="about" element={<About />} />
+            <Route path="submitted" element={<Submitted />} />
+          </Route>
           <Route path="/login" element={<AuthForm />} />
           <Route path="/reset" element={<ResetPassword />} />
-      </Routes>
-    </BrowserRouter>
-  );
+        </Routes>
+      </Router>
+    );
+  } catch (err) {
+    console.error("App rendering failed:", err);
+    return <p>Something went wrong.</p>;
+  }
 }

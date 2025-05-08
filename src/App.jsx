@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { supabase } from './lib/supabaseClient';
 import Layout from './layout/Layout';
 import Home from './pages/Home';
@@ -17,7 +17,7 @@ export default function App() {
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
 
-   useEffect(() => {
+  useEffect(() => {
     async function fetchRecipes() {
       const { data, error } = await supabase.from('recipes').select('*');
       if (error) {
@@ -33,19 +33,21 @@ export default function App() {
   if (loading) return <p>Loading site...</p>;
 
   return (
-    <Layout>
+    <Router>
       <Routes>
-        <Route path="/" element={<Home recipes={recipes} />} />
-        <Route path="/recipes" element={<RecipeList recipes={recipes} />} />
-        <Route path="/recipes/:id" element={<RecipeDetail />} />
-        <Route path="/submit" element={<SubmitRecipe />} />
-        <Route path="/moderate" element={<ModerationPanel />} />
-        <Route path="/cookbook" element={<Cookbook />} />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home recipes={recipes} />} />
+          <Route path="recipes" element={<RecipeList recipes={recipes} />} />
+          <Route path="recipes/:id" element={<RecipeDetail />} />
+          <Route path="submit" element={<SubmitRecipe />} />
+          <Route path="moderate" element={<ModerationPanel />} />
+          <Route path="cookbook" element={<Cookbook />} />
+          <Route path="about" element={<About />} />
+          <Route path="submitted" element={<Submitted />} />
+        </Route>
         <Route path="/login" element={<AuthForm />} />
         <Route path="/reset" element={<ResetPassword />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/submitted" element={<Submitted />} />
       </Routes>
-    </Layout>
+    </Router>
   );
 }

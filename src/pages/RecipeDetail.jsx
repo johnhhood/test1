@@ -46,7 +46,8 @@ export default function RecipeDetail() {
       )}
       <p>Cook Time: {recipe.cook_time}</p>
       <p>Tags: {recipe.tags?.join(', ')}</p>
-      <p>Views: {recipe.view_count}</p>
+      <p>Ingredients: {recipe.ingredients}</p>
+      <p>Steps {recipe.steps}</p>
       {/* Add more recipe details as needed */}
     </div>
   );

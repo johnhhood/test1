@@ -11,6 +11,7 @@ import Cookbook from './pages/Cookbook';
 import AuthForm from './pages/AuthForm';
 import ResetPassword from './pages/ResetPassword';
 import About from './pages/About';
+import Submitted from './pages/Submitted';
 
 export default function App() {
   const [recipes, setRecipes] = useState([]);
@@ -43,6 +44,7 @@ export default function App() {
         <Route path="/login" element={<AuthForm />} />
         <Route path="/reset" element={<ResetPassword />} />
         <Route path="/about" element={<About />} />
+        <Route path="/submitted" element={<Submitted />} />
       </Routes>
     </Layout>
   );

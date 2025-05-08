@@ -13,14 +13,19 @@ export default function Home() {
         .from('recipes')
         .select('*')
         .eq('is_approved', true)
-        .gte('views', 0)
-        .order('views', { ascending: false })
+        .gte('view_count', 0)
+        .order('view_count', { ascending: false })
+        .limit(6);
 
-      if (!error) setPopularRecipes(data);
-    };
+      if (error) {
+      console.error('Popular fetch error:', error.message);
+    } else {
+      setPopularRecipes(data);
+    }
+  };
 
-    fetchPopular();
-  }, []);
+  fetchPopular();
+}, []);
 
   return (
     <div className="home">

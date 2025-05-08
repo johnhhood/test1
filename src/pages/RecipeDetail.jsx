@@ -59,7 +59,7 @@ export default function RecipeDetail() {
         <div>
           <h2>Ingredients:</h2>
           <ul>
-            {recipe.ingredients.map((item, i) => (
+            {Array.isArray(recipe.ingredients) && recipe.ingredients.map((item, i) => (
               <li key={i}>{item}</li>
             ))}
           </ul>
@@ -72,7 +72,7 @@ export default function RecipeDetail() {
         <div>
           <h2>Steps:</h2>
           <ol>
-            {recipe.steps.map((step, i) => (
+            {Array.isArray(recipe.steps) && recipe.steps.map((item, i) => (
               <li key={i}>{step}</li>
             ))}
           </ol>

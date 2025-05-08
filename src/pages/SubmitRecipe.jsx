@@ -1,7 +1,15 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useSession } from '../lib/SessionContext';
-import { v4 as uuidv4 } from 'uuid';
+
+// Helper to sanitize uploaded filenames
+function sanitizeFilename(name) {
+  return name
+    .toLowerCase()
+    .replace(/\s+/g, '-')          // spaces to dashes
+    .replace(/[^a-z0-9.-]/g, '')   // remove special chars except . and -
+    .replace(/-+/g, '-');          // remove duplicate dashes
+}
 
 export default function SubmitRecipe() {
   const { user } = useSession();
@@ -16,26 +24,27 @@ export default function SubmitRecipe() {
   const [file, setFile] = useState(null);
   const [message, setMessage] = useState('');
 
-  const handleChange = e => {
-    setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+  const handleChange = (e) => {
+    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
   };
 
-  const handleFileChange = e => {
+  const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!user) return alert("Login required");
+    if (!user) return alert('Login required');
 
     let imageUrl = null;
 
+    // Upload image file (if provided)
     if (file) {
-      const filename = `${uuidv4()}-${file.name}`;
+      const filename = `${user.id}/${sanitizeFilename(file.name)}`;
       const { error: uploadError } = await supabase
         .storage
         .from('recipe-images')
-        .upload(filename, file);
+        .upload(filename, file, { upsert: true });
 
       if (uploadError) {
         console.error('Image upload error:', uploadError.message);
@@ -43,28 +52,33 @@ export default function SubmitRecipe() {
         return;
       }
 
-      imageUrl = `${supabase.storage.from('recipe-images').getPublicUrl(filename).data.publicUrl}`;
+      imageUrl = supabase.storage
+        .from('recipe-images')
+        .getPublicUrl(filename).data.publicUrl;
     }
 
     const recipeData = {
-      ...form,
-      author_id: user.id,
-      tags: form.tags
-        .split(',')
-        .map(tag => tag.trim())
-        .filter(Boolean),
+      title: form.title.trim(),
       ingredients: form.ingredients.trim(),
       steps: form.steps.trim(),
-      image_url: imageUrl
+      cook_time: form.cook_time,
+      servings: parseInt(form.servings, 10),
+      tags: form.tags
+        .split(',')
+        .map((tag) => tag.trim())
+        .filter(Boolean),
+      image_url: imageUrl,
+      author_id: user.id
+      // status and is_approved will default in DB
     };
 
     const { error } = await supabase.from('recipes').insert([recipeData]);
 
     if (error) {
       console.error('Submit error:', error.message);
-      setMessage('❌ Failed to submit.');
+      setMessage('❌ Failed to submit recipe.');
     } else {
-      setMessage('✅ Recipe submitted for review!');
+      setMessage('✅ Recipe submitted and is pending moderation!');
       setForm({
         title: '',
         ingredients: '',
@@ -136,7 +150,9 @@ export default function SubmitRecipe() {
           onChange={handleFileChange}
           className="form-input"
         />
-        <button type="submit" className="form-button">Submit</button>
+        <button type="submit" className="form-button">
+          Submit
+        </button>
         {message && <p className="form-message">{message}</p>}
       </form>
     </div>

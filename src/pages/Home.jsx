@@ -43,8 +43,9 @@ export default function Home() {
             <div className="recipe-card-content">
               <h2 className="recipe-title">{recipe.title}</h2>
               <p className="cook-time">⏱ {recipe.cook_time}</p>
-              {Array.isArray(recipe.tags) && (
-              <p className="tags">Tags: {recipe.tags.join(', ')}</p>
+                {Array.isArray(recipe.tags) && (
+                <p>Tags: {recipe.tags.join(', ')}</p>
+                )}
               )}
             </div>
           </Link>

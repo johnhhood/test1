@@ -21,15 +21,10 @@ export default function RecipeDetail() {
 
       setRecipe(data);
 
-      // Increment view_count
-      const { error: updateError } = await supabase
+      await supabase
         .from('recipes')
         .update({ view_count: (data.view_count || 0) + 1 })
         .eq('id', id);
-
-      if (updateError) {
-        console.error('Error incrementing view count:', updateError.message);
-      }
     };
 
     fetchAndIncrement();
@@ -59,7 +54,7 @@ export default function RecipeDetail() {
         <div>
           <h2>Ingredients:</h2>
           <ul>
-            {Array.isArray(recipe.ingredients) && recipe.ingredients.map((item, i) => (
+            {recipe.ingredients.map((item, i) => (
               <li key={i}>{item}</li>
             ))}
           </ul>
@@ -72,7 +67,7 @@ export default function RecipeDetail() {
         <div>
           <h2>Steps:</h2>
           <ol>
-            {Array.isArray(recipe.steps) && recipe.steps.map((item, i) => (
+            {recipe.steps.map((step, i) => (
               <li key={i}>{step}</li>
             ))}
           </ol>

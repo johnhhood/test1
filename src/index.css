@@ -28,6 +28,7 @@ body {
 }
 
 .sidebar nav a {
+  display: block;
   text-decoration: none;
   color: black;
   margin-bottom: 12px;

@@ -42,11 +42,7 @@ export default function Layout() {
             )}
           </div>
         </div>
-
-        {/* 👇 THIS IS WHAT RENDERS EACH PAGE */}
-        // Layout.jsx
-<div>TEST CONTENT</div>
-
+        <Outlet />
       </div>
     </div>
   );

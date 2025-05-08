@@ -23,7 +23,6 @@ export default function RecipeDetail() {
 
       setRecipe(data);
 
-      // Increment view count
       await supabase
         .from('recipes')
         .update({ view_count: (data.view_count || 0) + 1 })
@@ -50,8 +49,8 @@ export default function RecipeDetail() {
         />
       )}
 
-      <p>Cook Time: {recipe.cook_time}</p>
-      <p>Servings: {recipe.servings}</p>
+      <p><strong>Cook Time:</strong> {recipe.cook_time}</p>
+      <p><strong>Servings:</strong> {recipe.servings}</p>
 
       {Array.isArray(recipe.tags) && recipe.tags.length > 0 && (
         <p><strong>Tags:</strong> {recipe.tags.join(', ')}</p>
@@ -61,7 +60,9 @@ export default function RecipeDetail() {
         <>
           <h2>Ingredients</h2>
           <ul>
-            {recipe.ingredients.map((item, i) => <li key={i}>{item}</li>)}
+            {recipe.ingredients.map((item, i) => (
+              <li key={i}>{item}</li>
+            ))}
           </ul>
         </>
       ) : (
@@ -72,7 +73,9 @@ export default function RecipeDetail() {
         <>
           <h2>Steps</h2>
           <ol>
-            {recipe.steps.map((step, i) => <li key={i}>{step}</li>)}
+            {recipe.steps.map((step, i) => (
+              <li key={i}>{step}</li>
+            ))}
           </ol>
         </>
       ) : (

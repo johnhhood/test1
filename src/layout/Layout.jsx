@@ -21,7 +21,6 @@ export default function Layout() {
       </main>
     </div>
   );
-}
 
   const { user } = useSession();
 

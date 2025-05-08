@@ -31,3 +31,4 @@ export default function Home() {
     ✅ Home component loaded
   </div>
 );
+}

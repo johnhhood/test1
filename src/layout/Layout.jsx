@@ -1,27 +1,8 @@
-import { Link } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import { useSession } from '../lib/SessionContext';
 import { supabase } from '../lib/supabaseClient';
-import { Outlet } from 'react-router-dom';
 
 export default function Layout() {
-  return (
-    <div className="layout">
-      <aside className="sidebar">
-        <nav>
-          <a href="/">Home</a>
-          <a href="/recipes">Recipes</a>
-          <a href="/about">About</a>
-        </nav>
-      </aside>
-      <main className="main-content">
-        <header className="site-header">
-          <img src="/logo-banner.png" alt="Jump to Recipe Logo" className="logo-banner" />
-        </header>
-        <Outlet />
-      </main>
-    </div>
-  );
-
   const { user } = useSession();
 
   const handleLogout = async () => {
@@ -44,6 +25,12 @@ export default function Layout() {
 
       {/* Main content area */}
       <div className="main-content">
+        {/* Logo banner */}
+        <header className="site-header">
+          <img src="/logo-banner.png" alt="Jump to Recipe Logo" className="logo-banner" />
+        </header>
+
+        {/* Auth status and title */}
         <header className="header">
           <div className="site-title">Jump to Recipe</div>
           <div className="user-status">
@@ -60,7 +47,10 @@ export default function Layout() {
           </div>
         </header>
 
-        <main>{children}</main>
+        {/* Page content */}
+        <main>
+          <Outlet />
+        </main>
       </div>
     </div>
   );

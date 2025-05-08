@@ -44,6 +44,7 @@ export default function App() {
           <Route path="cookbook" element={<Cookbook />} />
           <Route path="about" element={<About />} />
           <Route path="submitted" element={<Submitted />} />
+           </Route>
           <Route path="/login" element={<AuthForm />} />
           <Route path="/reset" element={<ResetPassword />} />
       </Routes>

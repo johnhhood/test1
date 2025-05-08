@@ -56,6 +56,18 @@ body {
   border-bottom: 2px solid black;
 }
 
+.site-header {
+  background-color: #f0f0f0;
+  padding: 8px;
+  text-align: center;
+  border-bottom: 2px solid #008080;
+}
+
+.logo-banner {
+  max-width: 100%;
+  height: auto;
+}
+
 .site-title {
   font-weight: bold;
   font-size: 1.25rem;

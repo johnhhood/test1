@@ -1,7 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './layout/Layout';
 import Home from './pages/Home';
-import Login from './pages/Login';  // Add this line
+import Login from './pages/Login';
+import RecipeList from './pages/RecipeList';
+import SubmitRecipe from './pages/SubmitRecipe';
+import About from './pages/About';
+import Cookbook from './pages/Cookbook';
+import ModerationPanel from './pages/ModerationPanel';
+
 
 export default function App() {
   return (

@@ -23,7 +23,6 @@ export default function Layout() {
   );
 }
 
-export default function Layout({ children }) {
   const { user } = useSession();
 
   const handleLogout = async () => {

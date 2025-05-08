@@ -11,7 +11,6 @@ export default function Layout() {
 
   return (
     <div className="layout">
-      {/* Sidebar */}
       <aside className="sidebar">
         <nav>
           <Link to="/">🏠 Home</Link>
@@ -23,15 +22,12 @@ export default function Layout() {
         </nav>
       </aside>
 
-      {/* Main content area */}
       <div className="main-content">
-        {/* Logo banner */}
         <header className="site-header">
           <img src="/logo-banner.png" alt="Jump to Recipe Logo" className="logo-banner" />
         </header>
 
-        {/* Auth status and title */}
-        <header className="header">
+        <div className="header">
           <div className="site-title">Jump to Recipe</div>
           <div className="user-status">
             {user ? (
@@ -45,12 +41,10 @@ export default function Layout() {
               <Link to="/login" className="login-link">Log in</Link>
             )}
           </div>
-        </header>
+        </div>
 
-        {/* Page content */}
-        <main>
-          <Outlet />
-        </main>
+        {/* 👇 THIS IS WHAT RENDERS EACH PAGE */}
+        <Outlet />
       </div>
     </div>
   );

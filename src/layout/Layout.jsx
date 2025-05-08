@@ -1,15 +1,27 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, Link } from 'react-router-dom';
 import { useSession } from '../lib/SessionContext';
+import { supabase } from '../lib/supabaseClient';
 
 export default function Layout() {
   const { user, loading } = useSession();
-  console.log("Session loaded:", { user, loading });
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+  };
 
   return (
     <div style={{ border: '2px solid black', padding: '2rem' }}>
       <h1>✅ Layout Loaded</h1>
-      <p><a href="/login">Log in</a></p>
-      {user && <p>Welcome, {user.email || user.id}</p>}
+      
+      {user ? (
+        <>
+          <p>Welcome, {user.email}</p>
+          <button onClick={handleLogout}>Log out</button>
+        </>
+      ) : (
+        <p><Link to="/login">Log in</Link></p>
+      )}
+
       <Outlet />
     </div>
   );

@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { RecipeContext } from '../contexts/RecipeContext';
+import { RecipeContext } from '../contexts/RecipeContexts';
 
 export default function Home() {
   const { recipes, loading } = useContext(RecipeContext);

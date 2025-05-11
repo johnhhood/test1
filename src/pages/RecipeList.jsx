@@ -1,6 +1,11 @@
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { RecipeContext } from '../contexts/RecipeContexts';
 
-export default function RecipeList({ recipes = [] }) {
+export default function RecipeList() {
+  const { recipes, loading } = useContext(RecipeContext);
+
+  if (loading) return <p>Loading recipes...</p>;
   if (!Array.isArray(recipes) || recipes.length === 0) {
     return <p>No recipes found.</p>;
   }

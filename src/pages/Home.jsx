@@ -1,40 +1,24 @@
-import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabaseClient';
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { RecipeContext } from '../contexts/RecipeContext';
 
 export default function Home() {
-  const [recipes, setRecipes] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchRecipes = async () => {
-      const { data, error } = await supabase
-        .from('recipes')
-        .select('*')
-        .eq('is_approved', true)
-        .order('view_count', { ascending: false })
-        .limit(6);
-
-      if (error) {
-        console.error("Error fetching recipes:", error.message);
-      } else {
-        setRecipes(data);
-      }
-
-      setLoading(false);
-    };
-
-    fetchRecipes();
-  }, []);
+  const { recipes, loading } = useContext(RecipeContext);
 
   if (loading) return <p>Loading...</p>;
+
+  // Show only top 6 approved recipes, sorted by view_count descending
+  const popularRecipes = recipes
+    .filter(r => r.is_approved)
+    .sort((a, b) => b.view_count - a.view_count)
+    .slice(0, 6);
 
   return (
     <div className="home" style={{ padding: 40 }}>
       <h1>Popular Recipes</h1>
       <div className="popular-grid" style={{ display: 'grid', gap: '1.5rem' }}>
-        {Array.isArray(recipes) && recipes.length > 0 ? (
-          recipes.map(recipe => (
+        {popularRecipes.length > 0 ? (
+          popularRecipes.map(recipe => (
             <Link
               to={`/recipes/${recipe.id}`}
               key={recipe.id}

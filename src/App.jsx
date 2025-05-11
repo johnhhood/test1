@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { RecipeProvider } from './contexts/RecipeContext';
 import Layout from './layout/Layout';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -11,6 +12,7 @@ import RecipeDetail from './pages/RecipeDetail'; // ✅ Don't forget this import
 
 export default function App() {
   return (
+  <RecipeProvider>
     <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
@@ -25,5 +27,6 @@ export default function App() {
         <Route path="/login" element={<Login />} />
       </Routes>
     </Router>
+  </RecipeProvider>
   );
 }

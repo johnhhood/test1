@@ -45,8 +45,16 @@ export default function Layout() {
 
       {/* Main Content */}
       <main className="main-content" style={{ flex: 1, padding: '2rem' }}>
-        <Outlet />
-      </main>
+        <img
+        src="/logo-banner2.png"
+        alt="Jump to Recipe Logo"
+        className="logo-banner"
+        style={{ maxWidth: '100%', height: 'auto', marginBottom: '2rem' }}
+        />
+
+      <Outlet />
+    </main>
+
     </div>
   );
 }
